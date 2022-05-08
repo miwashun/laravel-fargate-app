@@ -38,7 +38,7 @@ jobs:
 
       - name: Cache composer
         id: cache-composer
-        uses: actions/cathe@v2
+        uses: actions/cache@v2
         with:
           path: backend/vendor
           key: composer-v1-${{ hashFiles('backend/composer.lock') }}
@@ -51,7 +51,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: backend/node_modules
-          key: npm-v1-${{ hashFile('backend/package-lock.json') }}
+          key: npm-v1-${{ hashFiles('backend/package-lock.json') }}
 
       - run: docker-compose exec -T web npm ci
         if: ${{ !steps.cache-npm-ci.outputs.cache-hit }}
@@ -68,7 +68,7 @@ jobs:
           ECR_REPOSITORY: ${{ env.SYSTEM_NAME }}-${{ env.ENV_NAME }}-${{ env.SERVICE_NAME }}-nginx
         run: |
           docker build \
-            --cache-from-$ECR_REGISTRY/$ECR_REPOSITORY:latest --build-arg BUILDKIT_INLINE_CACHE=1 . \
+            --cache-from=$ECR_REGISTRY/$ECR_REPOSITORY:latest --build-arg BUILDKIT_INLINE_CACHE=1 . \
             -f infra/docker/nginx/Dockerfile \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -79,7 +79,7 @@ jobs:
         env:
           DOCKER_BUILDKIT: 1
           ECR_REGISTRY: ${{ steps.amazon-ecr-login.outputs.registry }}
-          ECR_REPOSITRY: ${{ env.SYSTEM_NAME }}-${{ env.ENV_NAME }}-${{ env.SERVICE_NAME }}-php
+          ECR_REPOSITORY: ${{ env.SYSTEM_NAME }}-${{ env.ENV_NAME }}-${{ env.SERVICE_NAME }}-php
         run: |
           docker build \
             --cache-from=$ECR_REGISTRY/$ECR_REPOSITORY:latest --build-arg BUILDKIT_INLINE_CACHE=1 . \
