@@ -30,7 +30,7 @@ jobs:
 
       - name: Set env vars for prod
         # if: github.ref == 'refs/heads/main'
-        run: echo "ENV_NAMW=prod" >> $GITHUB_ENV
+        run: echo "ENV_NAME=prod" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
 
