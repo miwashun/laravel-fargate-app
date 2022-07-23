@@ -14,8 +14,8 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/example-prod-foobar/nginx",
-          "awslogs-region": "ap-northeast-1",
+          "awslogs-group": "{{ tfstate `data.aws_cloudwatch_log_group.nginx.name` }}",
+          "awslogs-region": "{{ must_env `AWS_REGION` }}",
           "awslogs-stream-prefix": "ecs"
         }
       },
@@ -40,12 +40,12 @@
       "cpu": 0,
       "environment": [],
       "essential": true,
-      "image": "522839609870.dkr.ecr.ap-northeast-1.amazonaws.com/example-prod-foobar-php:latest",
+      "image": "{{ tfstate `data.aws_ecr_repository.php.repository_url ` }}:{{ must_env `IMAGE_TAG` }}",
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/example-prod-foobar/php",
-          "awslogs-region": "ap-northeast-1",
+          "awslogs-group": "{{ tfstate `data.aws_cloudwatch_log_group.php.name` }}",
+          "awslogs-region": "{{ must_env `AWS_REGION` }}",
           "awslogs-stream-prefix": "ecs"
         }
       },
@@ -60,15 +60,15 @@
       "secrets": [
         {
           "name": "APP_KEY",
-          "valueFrom": "/example/prod/foobar/APP_KEY"
+          "valueFrom": "/{{ must_env `SYSTEM_NAME` }}/{{ must_env `ENV_NAME` }}/{{ must_env `SERVICE_NAME` }}/APP_KEY"
         }
       ],
       "volumesFrom": []
     }
   ],
   "cpu": "256",
-  "executionRoleArn": "arn:aws:iam::522839609870:role/example-prod-foobar-ecs-task-execution",
-  "family": "example-prod-foobar",
+  "executionRoleArn": "{{ tfstate `data.aws_iam_role.ecs_task_execution.arn` }}",
+  "family": "{{ must_env `SYSTEM_NAME` }}-{{ must_env `ENV_NAME` }}-{{ must_env `SERVICE_NAME` }}",
   "memory": "512",
   "networkMode": "awsvpc",
   "placementConstraints": [],
@@ -78,18 +78,18 @@
   "tags": [
     {
       "key": "Env",
-      "value": "prod"
+      "value": "{{ must_env `ENV_NAME` }}"
     },
     {
       "key": "System",
-      "value": "example"
+      "value": "{{ must_env `SYSTEM_NAME` }}"
     },
     {
       "key": "Name",
-      "value": "example-prod-foobar"
+      "value": "{{ must_env `SYSTEM_NAME` }}-{{ must_env `ENV_NAME` }}-{{ must_env `SERVICE_NAME` }}"
     }
   ],
-  "taskRoleArn": "arn:aws:iam::522839609870:role/example-prod-foobar-ecs-task",
+  "taskRoleArn": "{{ tfstate `data.aws_iam_role.ecs_task.arn` }}",
   "volumes": [
     {
       "host": {},
