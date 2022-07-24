@@ -39,7 +39,6 @@
   },
   "placementConstraints": [],
   "placementStrategy": [],
-  "platformFamily": "Linux",
   "platformVersion": "1.4.0",
   "schedulingStrategy": "REPLICA",
   "serviceRegistries": [],
