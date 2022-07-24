@@ -97,3 +97,4 @@ jobs:
       - name: Deploy to ecs
         run: ecspresso deploy --config config_$ENV_NAME.yaml
         working-directory: ./ecspresso
+        # w
