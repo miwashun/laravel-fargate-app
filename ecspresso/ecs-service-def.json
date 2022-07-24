@@ -22,19 +22,18 @@
     {
       "containerName": "nginx",
       "containerPort": 80,
-      "targetGroupArn": "arn:aws:elasticloadbalancing:ap-northeast-1:522839609870:targetgroup/example-prod-foobar/c258165a7f9af736"
+      "targetGroupArn": "{{ tfstate `data.aws_lb_target_group.this.arn` }}"
     }
   ],
   "networkConfiguration": {
     "awsvpcConfiguration": {
       "assignPublicIp": "DISABLED",
       "securityGroups": [
-        "sg-0b5b4e4a50c1454db"
+        "{{ tfstate `data.aws_security_group.vpc.id }}"
       ],
       "subnets": [
-        "subnet-0ac9a34f021d4c3cc",
-        "subnet-0caa4150feb0ab1c8",
-        "subnet-030c23382b22aaab4"
+        "{{ tfstate `data.aws_subnet.private['a'].id` }}",
+        "{{ tfstate `data.aws_subnet.private['c'].id` }}"
       ]
     }
   },
@@ -47,15 +46,15 @@
   "tags": [
     {
       "key": "Env",
-      "value": "prod"
+      "value": "{{ must_env `ENV_NAME` }}"
     },
     {
       "key": "System",
-      "value": "example"
+      "value": "{{ must_env `SYSTEM_NAME` }}"
     },
     {
       "key": "Name",
-      "value": "example-prod-foobar"
+      "value": "{{ must_env `SYSTEM_NAME`}}-{{ must_env `ENV_NAME` }}-{{ must_env `SERVICE_NAME` }}"
     }
   ]
 }
