@@ -29,7 +29,7 @@
     "awsvpcConfiguration": {
       "assignPublicIp": "DISABLED",
       "securityGroups": [
-        "{{ tfstate `data.aws_security_group.vpc.id }}"
+        "{{ tfstate `data.aws_security_group.vpc.id` }}"
       ],
       "subnets": [
         "{{ tfstate `data.aws_subnet.private['a'].id` }}",
@@ -54,7 +54,7 @@
     },
     {
       "key": "Name",
-      "value": "{{ must_env `SYSTEM_NAME`}}-{{ must_env `ENV_NAME` }}-{{ must_env `SERVICE_NAME` }}"
+      "value": "{{ must_env `SYSTEM_NAME` }}-{{ must_env `ENV_NAME` }}-{{ must_env `SERVICE_NAME` }}"
     }
   ]
 }
