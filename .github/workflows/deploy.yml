@@ -55,7 +55,7 @@ jobs:
       - run: docker-compose exec -T web npm ci
         if: ${{ !steps.cache-npm-ci.outputs.cache-hit }}
 
-      - run: docker-compose exec -T web npm run dev
+      - run: docker-compose exec -T web npm run prod
 
       - uses: aws-actions/amazon-ecr-login@v1
         id: amazon-ecr-login
