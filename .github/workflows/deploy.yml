@@ -59,7 +59,7 @@ jobs:
       - run: docker-compose exec -T web npm install --save-dev laravel-mix@latest
       # - run: docker-compose exec -T web rm -r .\node_modules\
       - run: docker-compose exec -T web rm package-lock.json
-      - run: docker-compose exec -T web rm yarn.lock
+      # - run: docker-compose exec -T web rm yarn.lock
       - run: docker-compose exec -T web npm cache clear --force
       - run: docker-compose exec -T web npm install
 
